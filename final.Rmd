@@ -11,7 +11,8 @@ library(tidyverse)
 opts_chunk$set(echo = TRUE)
 ```
 
-Temp
+Data retrieved from kaggle. Displays 27,000+ games from the Steam store from 2019, including game genres, release date,
+developer, publisher, etc. (https://www.kaggle.com/nikdavis/steam-store-games)
 
 ```{r}
 
@@ -34,7 +35,10 @@ top_devs <- dev_stats %>%
 top_devs %>%
   ggplot(aes(x = games,
              y = reorder(developer, games))) +
-  geom_col()
+  geom_col() +
+  labs(y = "Developer",
+       x = "Games Released",
+       title = "Top 25 Most Active Developers on Steam")
 
 ```
 
@@ -58,7 +62,10 @@ date_count %>%
   ggplot(aes(x = release_date,
              y = count,
              color = year(release_date))) +
-  geom_col()
+  geom_line() +
+  labs(y = "Number of Releases",
+       x = "Time of Release",
+       title = "Number of Releases on a Given Day (Steam 2015 - 2019)")
 
 # Graph 2
 # Enhanced visual of the year 2016
@@ -66,7 +73,10 @@ date_count %>%
   filter(year(release_date) == 2016) %>%
   ggplot(aes(x = release_date,
              y = count)) +
-  geom_col()
+  geom_point() +
+  labs(y = "Number of Releases",
+       x = "Time of Release",
+       title = "Number of Releases on a Given Day (Steam 2016)")
 
 ```
 
@@ -87,6 +97,9 @@ top_genres <- game_genres %>%
 top_genres %>%
   ggplot(aes(x = games,
              y = reorder(genres, games))) +
-  geom_col()
+  geom_col() +
+  labs(y = "Genre Combination",
+       x = "Number of Times Used",
+       title = "Most Popular Game Genres Created on Steam")
 
 ```
