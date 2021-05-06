@@ -1,0 +1,92 @@
+---
+title: "ISTA 320 Final"
+author: "Tarek Salazar"
+date: "Spring 2021"
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(lubridate)
+library(tidyverse)
+opts_chunk$set(echo = TRUE)
+```
+
+Temp
+
+```{r}
+
+steam_games <- read_csv("data/steam.csv")
+
+# Display the top 25 developers on steam based on games made.
+
+dev_stats <- steam_games %>%
+  select(developer) %>%
+  group_by(developer)
+
+dev_stats$count = 1
+
+top_devs <- dev_stats %>%
+  group_by(developer) %>%
+  summarize(games = sum(count)) %>%
+  top_n(25)
+
+# Graph 1
+top_devs %>%
+  ggplot(aes(x = games,
+             y = reorder(developer, games))) +
+  geom_col()
+
+```
+
+```{r}
+# Display game release dates, or How many games were released on a given day
+
+game_dates <- steam_games %>%
+  select(release_date)
+
+game_dates$count = 1
+
+date_count <- game_dates %>%
+  filter(year(release_date) >= 2015) %>%
+  group_by(release_date) %>%
+  summarize(count = sum(count))
+
+# Graph 1
+# Shows number of games released on a given day.
+# Days where a game were not released were not recorded
+date_count %>%
+  ggplot(aes(x = release_date,
+             y = count,
+             color = year(release_date))) +
+  geom_col()
+
+# Graph 2
+# Enhanced visual of the year 2016
+date_count %>%
+  filter(year(release_date) == 2016) %>%
+  ggplot(aes(x = release_date,
+             y = count)) +
+  geom_col()
+
+```
+
+```{r}
+# See the top 25 Game Genre Combinations on Steam
+
+game_genres <- steam_games %>%
+  select(genres)
+
+game_genres$count = 1
+
+top_genres <- game_genres %>%
+  group_by(genres) %>%
+  summarize(games = sum(count)) %>%
+  top_n(25)
+
+# Graph 1
+top_genres %>%
+  ggplot(aes(x = games,
+             y = reorder(genres, games))) +
+  geom_col()
+
+```
